@@ -19,10 +19,7 @@ public class NoeudArbre {
 		this.gauche = gauche;
 		this.droit = droit;
 	}
-	
-	/**
-	* 
-	*/
+
 	public boolean estFeuille() {
 		return gauche == null && droit == null;
 	}
@@ -74,21 +71,68 @@ public class NoeudArbre {
 		}
 	}
 	
-	public String definir(String animal) {
-		return null;
+	/*public static String definir(String animal, NoeudArbre arbre) {
+		String chemin ="";
+		if (arbre.getContenu().equals(animal)) {
+			chemin += "==>" + animal;
+		}
+		else if (arbre.estFeuille()) {	//Sinon si c'est une feuille sans l'animal
+			return null;
+		}
+		else {							//Si c'est un noeud
+			
+			
+			chemin += definir(animal, arbre.getNoeudGauche(), chemin);
+		}
+		return chemin;
+	}*/
+	 public String definir(String animal) {
+		if(!isQuestion(contenu)) {			//Si c'est une feuille
+			if(!contenu.equals(animal)) {
+				return "";
+			}
+			else {
+				return "=> " + animal;
+			}
+		}
+		else {
+			String retourG = this.gauche.definir(animal);
+			String retourD = this.droit.definir(animal);
+			if(!retourG.equals("")) {
+				return this.contenu + " -> non; " + retourG; 
+			}
+			else {
+			if(!retourD.equals("")) {
+				return this.contenu + " -> oui; " + retourD;
+			}
+			else
+				return "";
+			}
+		}
+    }
+	
+	public static NoeudArbre creerArbre(String args[]) {
+		int i = 2;
+		NoeudArbre tmp = null;
+		if (i<args.length) {
+			tmp = creerArbre(args, i);
+		}
+		return tmp;
 	}
 	
 	public static NoeudArbre creerArbre(String args[], int cursor) {
-		if(args.length > 1 && i < args.length) {
-			NoeudArbre arbre = new NoeudArbre(args[1]);
-			NoeudArbre tmp = arbre;
-			for (int i = 1; i < args.length; i++) {
-				if (isQuestion(tmp)) {
-					
-				}
+		NoeudArbre tmp = null;
+		if (cursor < args.length) {
+			if (!isQuestion(args[cursor])) {	//Si c'est une feuille
+				tmp = new NoeudArbre(args[cursor]);
+			}
+			else {								//Si c'est un noeud
+				tmp = new NoeudArbre(args[cursor]);
+				tmp.setNoeudGauche(creerArbre(args,++cursor));
+				tmp.setNoeudDroit(creerArbre(args,++cursor));
 			}
 		}
-		return null;
+		return tmp;
 	}
 		
 	public static boolean isQuestion(String str) {
@@ -128,7 +172,7 @@ public class NoeudArbre {
 	
 	public static void main(String args[]) {
 		NoeudArbre arbre = null;
-		if (args.length >= 3) {
+		if (args.length == 3) {
 			arbre = new NoeudArbre(args[0]);
 			NoeudArbre noeudGauche = new NoeudArbre(args[1]);
 			NoeudArbre noeudDroit = new NoeudArbre(args[2]);
@@ -136,8 +180,8 @@ public class NoeudArbre {
 			arbre.setNoeudDroit(noeudDroit);
 		}
 		else if(args[0].equals("--definir") && args.length > 1) {
-			//NoeudArbre.creerArbre(args);
-			//System.out.println(NoeudArbre.isQuestion("est-ce une question "));
+			arbre = NoeudArbre.creerArbre(args);
+			System.out.println(arbre.definir(args[1]));
 		}
 		else {
 			arbre = new NoeudArbre("Est-ce un mamifère ?");
@@ -161,10 +205,3 @@ public class NoeudArbre {
 		}
 	}
 }
-
-/*
-	
-*/
-
-
-

@@ -1,0 +1,1 @@
+"Est-ce un mammifère ?" "un crocodile" "Est-ce qu’il aboie ?" "un cheval" "un chien"
